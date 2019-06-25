@@ -28,7 +28,7 @@ function mapStateToProps(state){
 }
 
 function loadData(store){
-    return store.dispatch(fetchUsers())  //returning the netowrk promise to server index file. Promise is created by the action creator while fetching data
+    return store.dispatch(fetchUsers())  //returning the network promise to server index file. Promise is created by the action creator while fetching data
 }
 
 export default {

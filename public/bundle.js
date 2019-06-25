@@ -9025,7 +9025,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //ties the store in the react side of the application.
 // root for the client side code bases
 
-var store = (0, _redux.createStore)(_reducers2.default, {}, (0, _redux.applyMiddleware)(_reduxThunk2.default)); //to control asynchronous action creators
+var store = (0, _redux.createStore)(_reducers2.default, window.INITIAL_STATE, (0, _redux.applyMiddleware)(_reduxThunk2.default)); //to control asynchronous action creators
 
 
 _reactDom2.default.hydrate(_react2.default.createElement(
@@ -37232,7 +37232,7 @@ function mapStateToProps(state) {
 }
 
 function loadData(store) {
-    return store.dispatch((0, _actions.fetchUsers)()); //returning the netowrk promise to server index file. Promise is created by the action creator while fetching data
+    return store.dispatch((0, _actions.fetchUsers)()); //returning the network promise to server index file. Promise is created by the action creator while fetching data
 }
 
 exports.default = {

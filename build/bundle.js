@@ -315,7 +315,7 @@ exports.default = function (req, store) {
         )
     ));
 
-    return '\n        <html>\n            <head></head>\n            <body>\n                <div id="root">' + content + '</div>\n                <script src="bundle.js"></script>\n            </body>\n        </html>\n    ';
+    return '\n        <html>\n            <head></head>\n            <body>\n                <div id="root">' + content + '</div>\n                <script>\n                    window.INITIAL_STATE = ' + JSON.stringify(store.getState()) + '\n                </script>\n                <script src="bundle.js"></script>\n            </body>\n        </html>\n    ';
 };
 
 /***/ }),
@@ -444,7 +444,7 @@ function mapStateToProps(state) {
 }
 
 function loadData(store) {
-    return store.dispatch((0, _actions.fetchUsers)()); //returning the netowrk promise to server index file. Promise is created by the action creator while fetching data
+    return store.dispatch((0, _actions.fetchUsers)()); //returning the network promise to server index file. Promise is created by the action creator while fetching data
 }
 
 exports.default = {
