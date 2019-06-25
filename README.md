@@ -21,6 +21,8 @@
  - Need state rehydration on the browser
 
 
+- For working with async/ await syntax, Babel will assume that we have defined some generator runtime in our environment
+
 
 
 
