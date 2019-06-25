@@ -8,7 +8,8 @@
   "scripts": {
     "//": "nodemon will restart the server when webpack puts a new file in the bundle directory. Whenever there is a change in the build directory, nodemon executes node build/bundle.js",
     "dev:server": "nodemon --watch build --exec \"node build/bundle.js\"",
-    "dev:build:server": "webpack --config webpack.server.js --watch"
+    "dev:build:server": "webpack --config webpack.server.js --watch",
+    "dev:build:client": "webpack --config webpack.client.js --watch"
   },
   "dependencies": {
     "axios": "0.16.2",
