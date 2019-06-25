@@ -23,6 +23,7 @@ app.get('*', (req, res) => {
     //logic to initialize and load data to the store
     //only after loading data into the store, will we render the string
 
+    
     res.send(renderer(req, store))
 })
 

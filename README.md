@@ -23,7 +23,15 @@
 
 - For working with async/ await syntax, Babel will assume that we have defined some generator runtime in our environment
 
+- Methods like componenDidMount won't ever get invoked in the server during server side rendering
 
+
+## Solution to server side Data loading
+ - Figure out the what components would have rendered (from URL)
+ - Call a loadData() method attached to each of the components
+ - Wait for response
+ - Somehow detect that all the requests are complete
+ - Render the app with the collected data
 
 
 
