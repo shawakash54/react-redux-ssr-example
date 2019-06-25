@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,12 +71,59 @@ module.exports = require("react");
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Home = __webpack_require__(11);
+
+var _Home2 = _interopRequireDefault(_Home);
+
+var _UsersList = __webpack_require__(12);
+
+var _UsersList2 = _interopRequireDefault(_UsersList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// export default () => {
+//     return (
+//         <div>
+//             <Route exact path="/" component={Home} />
+//             <Route exact path="/users" component={UsersList} />
+//         </div>
+//     )
+// }
+
+// to make use of react router config library for ssr data loading, we need to declare routes like this instead of JSX
+
+// import { Route } from 'react-router-dom'
+exports.default = [{
+    path: '/',
+    component: _Home2.default,
+    exact: true
+}, {
+    loadData: _UsersList.loadData,
+    path: '/users',
+    component: _UsersList2.default
+}];
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-redux");
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -87,7 +134,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.fetchUsers = exports.FETCH_USERS = undefined;
 
-var _axios = __webpack_require__(12);
+var _axios = __webpack_require__(13);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -131,31 +178,43 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-config");
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux");
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(5);
+__webpack_require__(7);
 
-var _express = __webpack_require__(6);
+var _express = __webpack_require__(8);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _renderer = __webpack_require__(7);
+var _renderer = __webpack_require__(9);
 
 var _renderer2 = _interopRequireDefault(_renderer);
 
 var _createStore = __webpack_require__(15);
 
 var _createStore2 = _interopRequireDefault(_createStore);
+
+var _reactRouterConfig = __webpack_require__(4);
+
+var _Routes = __webpack_require__(1);
+
+var _Routes2 = _interopRequireDefault(_Routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -177,9 +236,21 @@ app.get('*', function (req, res) {
 
     //logic to initialize and load data to the store
     //only after loading data into the store, will we render the string
+    //invoke loadData for each matched route
+    //the following will return an array of network promises
 
+    var promises = (0, _reactRouterConfig.matchRoutes)(_Routes2.default, req.path).map(function (_ref) {
+        var route = _ref.route;
 
-    res.send((0, _renderer2.default)(req, store));
+        return route.loadData ? route.loadData(store) : null;
+    });
+
+    //Promises.all() takes an array of promises and returns 1 promise. As soon as all the promises in the array are resolved, the
+    // new returned promise will be resolved as well
+    //render the app when all data loading functions are present
+    Promise.all(promises).then(function () {
+        res.send((0, _renderer2.default)(req, store));
+    });
 });
 
 app.listen(3000, function () {
@@ -187,19 +258,19 @@ app.listen(3000, function () {
 });
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-polyfill");
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -213,17 +284,17 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(8);
+var _server = __webpack_require__(10);
 
-var _Routes = __webpack_require__(9);
+var _Routes = __webpack_require__(1);
 
 var _Routes2 = _interopRequireDefault(_Routes);
 
-var _reactRouterDom = __webpack_require__(13);
+var _reactRouterDom = __webpack_require__(14);
 
-var _reactRedux = __webpack_require__(1);
+var _reactRedux = __webpack_require__(2);
 
-var _reactRouterConfig = __webpack_require__(14);
+var _reactRouterConfig = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -248,59 +319,13 @@ exports.default = function (req, store) {
 };
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _Home = __webpack_require__(10);
-
-var _Home2 = _interopRequireDefault(_Home);
-
-var _UsersList = __webpack_require__(11);
-
-var _UsersList2 = _interopRequireDefault(_UsersList);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// export default () => {
-//     return (
-//         <div>
-//             <Route exact path="/" component={Home} />
-//             <Route exact path="/users" component={UsersList} />
-//         </div>
-//     )
-// }
-
-// to make use of react router config library for ssr data loading, we need to declare routes like this instead of JSX
-
-// import { Route } from 'react-router-dom'
-exports.default = [{
-    path: '/',
-    component: _Home2.default,
-    exact: true
-}, {
-    path: '/users',
-    component: _UsersList2.default
-}];
-
-/***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -338,7 +363,7 @@ var Home = function Home() {
 exports.default = Home;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -347,6 +372,7 @@ exports.default = Home;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.loadData = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -354,9 +380,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(1);
+var _reactRedux = __webpack_require__(2);
 
-var _actions = __webpack_require__(2);
+var _actions = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -416,25 +442,24 @@ function mapStateToProps(state) {
     return { users: state.users };
 }
 
+function loadData(store) {
+    return store.dispatch((0, _actions.fetchUsers)()); //returning the netowrk promise to server index file. Promise is created by the action creator while fetching data
+}
+
+exports.loadData = loadData;
 exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList);
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = require("axios");
 
 /***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-router-dom");
+module.exports = require("axios");
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-router-config");
+module.exports = require("react-router-dom");
 
 /***/ }),
 /* 15 */
@@ -447,7 +472,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(3);
+var _redux = __webpack_require__(5);
 
 var _reduxThunk = __webpack_require__(16);
 
@@ -481,7 +506,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(3);
+var _redux = __webpack_require__(5);
 
 var _usersReducer = __webpack_require__(18);
 
@@ -504,7 +529,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _actions = __webpack_require__(2);
+var _actions = __webpack_require__(3);
 
 exports.default = function () {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];

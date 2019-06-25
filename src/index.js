@@ -24,9 +24,19 @@ app.get('*', (req, res) => {
 
     //logic to initialize and load data to the store
     //only after loading data into the store, will we render the string
-    matchRoutes(Routes, req.path)
-    
-    res.send(renderer(req, store))
+    //invoke loadData for each matched route
+    //the following will return an array of network promises
+
+    const promises = matchRoutes(Routes, req.path).map(({route}) => {
+        return route.loadData ? route.loadData(store) : null
+    })
+
+    //Promises.all() takes an array of promises and returns 1 promise. As soon as all the promises in the array are resolved, the
+    // new returned promise will be resolved as well
+    //render the app when all data loading functions are present
+    Promise.all(promises).then(() => {
+        res.send(renderer(req, store))
+    })
 })
 
 app.listen(3000, ()=>{

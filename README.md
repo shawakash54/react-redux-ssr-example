@@ -29,6 +29,9 @@
 ## Solution to server side Data loading
  - Figure out the what components would have rendered (from URL)
  - Call a loadData() method attached to each of the components
+    - Add a loadData to every component
+    - loadData will initiate some data loading process required by the component
+    - add loadData method to the routes file so that routes file knows which loadData method belongs to which component
  - Wait for response
  - Somehow detect that all the requests are complete
  - Render the app with the collected data
