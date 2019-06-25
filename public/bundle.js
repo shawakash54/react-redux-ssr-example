@@ -8688,7 +8688,7 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
                     switch (_context.prev = _context.next) {
                         case 0:
                             _context.next = 2;
-                            return _axios2.default.get('http://react-ssr-api.herokuapp.com/users');
+                            return _axios2.default.get('https://609beef7-d648-4e45-ab9e-ac839e06c751.mock.pstmn.io/users');
 
                         case 2:
                             res = _context.sent;
